@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Reload - Sasta Samaan</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        iframe {
+            width: 95%;
+            height: 85vh;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔄 Auto Reloading...</h1>
+    <p>Reloading <b>Sasta Samaan</b> after full page load.</p>
+
+    <!-- Iframe to load the target website -->
+    <iframe id="myFrame" src="https://sastasamaan.wuaze.com/?wp_automatic=cron"></iframe>
+
+    <script>
+        let iframe = document.getElementById("myFrame");
+
+        // Detect when the iframe has fully loaded
+        iframe.onload = function() {
+            console.log("Page Loaded! Reloading again...");
+            setTimeout(() => {
+                iframe.src = iframe.src; // Reload the iframe
+            }, 1000); // Small delay before reloading
+        };
+    </script>
+
+</body>
+</html>
