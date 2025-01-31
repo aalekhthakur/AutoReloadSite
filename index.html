@@ -6,47 +6,38 @@
     <title>Auto Reload - Sasta Samaan</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            text-align: center;
             background-color: #121212;
             color: white;
-            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            border: 2px solid orange;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            display: inline-block;
+            border-radius: 10px;
         }
         h1 {
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        iframe {
-            width: 95%;
-            height: 85vh;
-            border: 2px solid #ff9800;
-            border-radius: 10px;
+            color: #00aaff;
         }
     </style>
 </head>
 <body>
-
     <h1>🔄 Auto Reloading...</h1>
     <p>Reloading <b>Sasta Samaan</b> after full page load.</p>
-
-    <!-- Iframe to load the target website -->
-    <iframe id="myFrame" src="https://sastasamaan.wuaze.com/?wp_automatic=cron"></iframe>
+    <div class="container">
+        <iframe id="reloadFrame" src="https://sastasamaan.wuaze.com/?wp_automatic=cron" 
+            width="100%" height="600px"></iframe>
+    </div>
 
     <script>
-        let iframe = document.getElementById("myFrame");
-
-        // Detect when the iframe has fully loaded
-        iframe.onload = function() {
-            console.log("Page Loaded! Reloading again...");
-            setTimeout(() => {
-                iframe.src = iframe.src; // Reload the iframe
-            }, 1000); // Small delay before reloading
+        // Function to detect when iframe is fully loaded
+        document.getElementById('reloadFrame').onload = function() {
+            setTimeout(function() {
+                document.getElementById('reloadFrame').contentWindow.location.reload();
+            }, 2000); // Reload after 2 seconds once fully loaded
         };
     </script>
-
 </body>
 </html>
