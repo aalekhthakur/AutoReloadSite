@@ -3,36 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Reload - Sasta Samaan</title>
+    <title>Auto Reload with Cookies</title>
     <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
         body {
             background-color: #121212;
             color: white;
-            font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: cyan;
-        }
-        iframe {
-            width: 90%;
-            height: 80vh;
-            border: 2px solid orange;
-        }
-    </style>
-    <script>
-        function reloadIframe() {
-            document.getElementById("myFrame").contentWindow.location.reload();
+            padding: 20px;
         }
 
-        setInterval(reloadIframe, 5000); // Reloads the iframe every 5 seconds
-    </script>
+        h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        /* Input and Button */
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ff9800;
+            border-radius: 5px;
+            outline: none;
+            background: #222;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff9800;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #e68900;
+        }
+
+        /* Iframe Container */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 350px;
+            border: 3px solid #ff9800;
+            border-radius: 10px;
+            background-color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>🔄 Auto Reloading...</h1>
-    <p>Reloading <strong>Sasta Samaan</strong> every <strong>5 seconds</strong>.</p>
+
+    <h1>Auto Reload with Cookies</h1>
     
-    <iframe id="myFrame" src="https://sastasamaan.wuaze.com/?wp_automatic=cron"></iframe>
+    <div class="input-container">
+        <input type="text" id="urlInput" placeholder="Enter URL (https://example.com)">
+        <button onclick="startInIframes()">Start in Iframes</button>
+        <button onclick="openInTabs()">Open in 4 Tabs</button>
+    </div>
+
+    <div class="container">
+        <iframe id="frame1" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe id="frame2" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe id="frame3" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe id="frame4" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <script>
+        function startInIframes() {
+            let url = document.getElementById("urlInput").value.trim();
+
+            // Validate URL
+            if (!url.startsWith("http")) {
+                alert("Please enter a valid URL with http or https.");
+                return;
+            }
+
+            let frames = [
+                document.getElementById("frame1"),
+                document.getElementById("frame2"),
+                document.getElementById("frame3"),
+                document.getElementById("frame4")
+            ];
+
+            let failedToLoad = 0; // Track iframe failures
+
+            frames.forEach((frame, index) => {
+                frame.src = url;
+
+                // Reload the iframe only after it's fully loaded
+                frame.onload = () => {
+                    console.log(`Frame ${index + 1} fully loaded`);
+                    setTimeout(() => {
+                        frame.src = url; // Reload the frame
+                    }, 5000);  // Reload after 5 seconds
+                };
+
+                frame.onerror = () => {
+                    failedToLoad++;
+                    console.log(`Frame ${index + 1} failed to load`);
+                    
+                    // If all 4 iframes fail, open in new tabs
+                    if (failedToLoad === 4) {
+                        alert("The website is blocking cookies in iframes. Opening in new tabs instead.");
+                        openInTabs();
+                    }
+                };
+            });
+        }
+
+        function openInTabs() {
+            let url = document.getElementById("urlInput").value.trim();
+            if (!url.startsWith("http")) {
+                alert("Please enter a valid URL (http or https)");
+                return;
+            }
+
+            for (let i = 0; i < 4; i++) {
+                window.open(url, '_blank');
+            }
+        }
+    </script>
+
 </body>
 </html>
